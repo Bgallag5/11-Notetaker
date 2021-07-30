@@ -4,7 +4,7 @@
  # Notetaker
 
   -[Description](#description)
-  -[Made With](#made_with)
+  -[Made With](#madewith)
   -[Usage](#usage)
   -[Questions](#questions)
   -[License](#license)
