@@ -21,44 +21,31 @@ app.get('/', (req, res) =>{
 app.get("/notes", (req, res) => {
 res.sendFile(path.join(__dirname, "./public/notes.html"))
 })
-
+//api get
 app.get("/api/notes", (req, res) => {
     console.log(notesArray);
-    return res.json(notesArray);
+    return res.json(notesArray);  //returns notesArray as json 
   });
-
+//api post 
 app.post("/api/notes", (req, res) =>{
-    // req.body.id = notes.length.toString();  //// add unique id to each new note
-    // const note = createNote(req.body, notes);
+    console.log(req);
+    console.log(req.body);
+    
     const note = req.body;
     note.id = (notesArray.length).toString();  //create unique id for each note
     notesArray.push(note);
 
-    fs.writeFileSync("db/db.json", JSON.stringify(notesArray))
+    fs.writeFile(notes, JSON.stringify(notesArray), (err) =>{ //write notesArray as json data
+    if(err) console.log(err);
+    }) 
     res.json(notesArray);
 })
-
 
 app.listen(3001, () => {
     console.log("API server now on port 3001");
   });
 
 
-
-
-// const createNote = function (body, array){
-//     //pass in new note with req.body and existing note array
-//     //push new note to notes array => fs.WriteFile(stringify(notesarray))
-// }
-
-////one get route for the homepage
-////2 api routes to get and post /api/notes 
-
-// const pageLoad = function(){
-//     //load .db to notes page on load 
-// }
-
-
-////TODO: finish app.get? does it need an fs.ReadFile? 
+////TODO: finish app.get? does it need an fs.ReadFile?  -- no i dont think so 
 //// app.get(*) to cover all other cases
 //// add a delete api call 
