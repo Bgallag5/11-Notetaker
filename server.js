@@ -69,6 +69,3 @@ app.listen(3001, () => {
   console.log("API server listening on port 3001");
 });
 
-////TODO: finish app.get? does it need an fs.ReadFile?  -- no i dont think so
-//// app.get(*) to cover all other cases
-//// add a delete api call
