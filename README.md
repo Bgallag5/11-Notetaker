@@ -13,7 +13,7 @@
   This application uses the express, path, and fs packages from npm to store and read notes as json data 
   
   ## Made With
-  HTML, CSS, Javascript, Express.js
+  HTML, CSS, Javascript, Express.js, Node.js
 
   ## Usage 
   This application can be used for simple note taking. 
