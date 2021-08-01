@@ -8,44 +8,67 @@ const path = require("path");
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-
-const notesArray = [];
+var notesArray = [];
 
 //homepage
-app.get('/', (req, res) =>{
-    res.sendFile(path.join(__dirname, "./public/index.html"))
-})
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
 //notespage
 app.get("/notes", (req, res) => {
-res.sendFile(path.join(__dirname, "./public/notes.html"))
-})
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
+
 //api get
 app.get("/api/notes", (req, res) => {
-    console.log(notesArray);
-    return res.json(notesArray);  //returns notesArray as json 
-  });
-//api post 
-app.post("/api/notes", (req, res) =>{
-    console.log(req);
-    console.log(req.body);
-    
-    const note = req.body;
-    note.id = (notesArray.length).toString();  //create unique id for each note
-    notesArray.push(note);
+  return res.json(notesArray); //returns notesArray as json
+});
 
-    fs.writeFile(notes, JSON.stringify(notesArray), (err) =>{ //write notesArray as json data
-    if(err) console.log(err);
-    }) 
+//api post
+app.post("/api/notes", (req, res) => {
+
+  const note = req.body;
+  note.id = notesArray.length.toString(); //create unique id for each note
+  notesArray.push(note);
+
+  fs.writeFile("db/db.json", JSON.stringify(notesArray), (err) => {
+    //write notesArray as json data
+    if (err) console.log(err);
+  });
+  res.json(notesArray);
+});
+
+//api delete 
+app.delete("/api/notes/:id", (req, res) => {
+  fs.readFile("db/db.json", (err, data) => {
+    let notes = JSON.parse(data);
+    console.log(notes);
+    let id = req.params.id;
+    console.log(notes[id]);
+
+    notesArray = notesArray.filter((notes) => {
+      return notes.id !== id;
+    });
+    console.log(notesArray);
+
+    //nest a writeFileSync inside the readFile to write new array
+    fs.writeFileSync("db/db.json", JSON.stringify(notesArray), (err) => {
+      if (err) throw err;
+    });
     res.json(notesArray);
-})
+  });
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
 
 app.listen(3001, () => {
-    console.log("API server now on port 3001");
-  });
+  console.log("API server listening on port 3001");
+});
 
-
-////TODO: finish app.get? does it need an fs.ReadFile?  -- no i dont think so 
+////TODO: finish app.get? does it need an fs.ReadFile?  -- no i dont think so
 //// app.get(*) to cover all other cases
-//// add a delete api call 
+//// add a delete api call
